@@ -1,0 +1,1 @@
+for %%i in (*.arc) do DARC_TOOL -unpack "%%i"
