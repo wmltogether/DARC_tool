@@ -158,6 +158,11 @@ def pack_darc(fn):
             fp.write('\x00' * align)
             f_pos += align
             fp.seek(f_pos)
+        else:
+            align = 0x4 - f_pos%0x4
+            fp.write('\x00' * align)
+            f_pos += align
+            fp.seek(f_pos)  
         file_offset = fp.tell()
         file_length = len(n_data)
         fp.write(n_data)
@@ -228,6 +233,10 @@ def inject_darc(fn):
                     f_pos = fp.tell()
                     align = 0x80 - f_pos%0x80
                     fp.write('\x00' * align)
+                else:
+                    f_pos = fp.tell()
+                    align = 0x4 - f_pos%0x4
+                    fp.write('\x00' * align)             
                 file_offset = fp.tell()
                 #print('EXTEND to >>>> %08x'%file_offset)
                 fp.write(n_data)
@@ -248,7 +257,8 @@ def test():
         flag.append('')
         print('usage :\n' +\
               'unpack darc files : DARC_tool -unpack 123.arc \n' +\
-              'inject darc files : DARC_tool -pack 123.arc \n')
+              'inject darc files : DARC_tool -inject 123.arc \n' +\
+              'repack darc files : DARC_tool -pack 123.arc \n')
     elif len(flag)>2 and flag[1] == '-unpack':
         fn = flag[2]
         unpack_darc(fn)
@@ -268,8 +278,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-    
-    
-        
-        
-    
+
